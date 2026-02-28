@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://backend-aria-eight.vercel.app/api",
+  baseURL: "https://aria-ai-backend.vercel.app/api",
 });
 
 // Auto-attach JWT token from localStorage to every request
