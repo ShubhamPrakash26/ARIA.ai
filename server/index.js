@@ -28,8 +28,6 @@ const io = new Server(server, {
   },
 });
 
-connectDB();
-
 app.use(
   cors({
     origin: allowedOrigins,
@@ -40,6 +38,16 @@ app.use(express.json());
 app.use(passport.initialize());
 
 require("./passport")(passport);
+
+app.use("/api", async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error("MongoDB connection failed:", error.message);
+    res.status(503).json({ message: "Service unavailable, please try again" });
+  }
+});
 
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/rooms", require("./routes/rooms"));
