@@ -2,7 +2,11 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { io } from "socket.io-client";
 import API from "../lib/api";
 
-const SOCKET_URL = "https://aria-ai-backend.vercel.app";
+const SOCKET_URL =
+  import.meta.env.VITE_SOCKET_URL ||
+  (window.location.hostname === "localhost"
+    ? "http://localhost:3000"
+    : "https://aria-ai-backend.vercel.app");
 
 export function useSocket(roomId) {
   const socketRef = useRef(null);

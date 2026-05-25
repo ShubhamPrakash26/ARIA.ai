@@ -9,11 +9,20 @@ const registerChatHandlers = require("./socket/chatHandler");
 
 const app = express();
 const server = http.createServer(app);
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
+
+const allowedOrigins = (
+  process.env.CLIENT_URL
+    ? process.env.CLIENT_URL.split(",").map((origin) => origin.trim())
+    : [
+        "http://localhost:5173",
+        "https://aria-ai-frontend.vercel.app",
+      ]
+).filter(Boolean);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || "https://kasukabe-coders.vercel.app/",
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -23,7 +32,7 @@ connectDB();
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: allowedOrigins,
     credentials: true,
   })
 );
