@@ -14,18 +14,20 @@ const sendEmail = async (email, code) => {
       user: emailUser,
       pass: emailPass,
     },
+    pool: false,
   });
 
-  await transporter.verify();
-
-  const info = await transporter.sendMail({
-    from: emailUser,
-    to: email,
-    subject: "Verification Code",
-    text: `Your verification code is: ${code}`,
-  });
-
-  console.log("Email sent successfully:", info.response);
+  try {
+    const info = await transporter.sendMail({
+      from: emailUser,
+      to: email,
+      subject: "Verification Code",
+      text: `Your verification code is: ${code}`,
+    });
+    console.log("Email sent successfully:", info.response);
+  } finally {
+    transporter.close();
+  }
 };
 
 module.exports = sendEmail;
